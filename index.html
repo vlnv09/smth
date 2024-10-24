@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: fixed; /* Changed from relative to fixed */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* Center the heart */
+            width: min(100px, 25vw);
+            height: min(90px, 22.5vw);
+            cursor: pointer;
+            transition: all 1s ease;
+            opacity: 1;
+        }
+
+        .heart.fade-out {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 52%;
+            height: 89%;
+            border-radius: 50px 50px 0 0;
+            background-color: #304529;
+        }
+
+        .heart::before {
+            left: 50%;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .falling-heart {
+            position: fixed;
+            font-size: min(28px, 7vw);
+            color: #304529;
+            top: -50px;
+            animation: fall 3s linear;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(120vh);
+            }
+        }
+
+        .letter-box {
+            position: fixed; /* Changed from absolute to fixed */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.9); /* Center the letter box */
+            width: min(500px, 80%); /* Max width added */
+            max-height: 80vh;
+            background-color: #304529;
+            border-radius: 15px;
+            opacity: 0;
+            transition: all 1.2s ease;
+            display: none;
+            padding: 2rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .letter-box.show {
+            opacity: 1;
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .letter-content {
+            font-family: 'Lexend', sans-serif;
+            color: white;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            line-height: 1.6;
+        }
+
+        .letter-paragraph {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart" onclick="createRain()"></div>
+    <div class="letter-box">
+        <div class="letter-content">
+            <p class="letter-paragraph">
+                hi baby, if ure reading this then ure prob awake. obviously, cz like how wld u read it if ure asleep. ANYWAYSSS i js wanna tell u that i love you so very much nd that im currently arguing back nd forth w ur guardian angel for not keeping an eye on u nd letting u get sick 😝
+            </p>
+
+            <p class="letter-paragraph">
+                on a more serious level, please take care of urself. drink ur medicine on time, eat on time, keep urself hydrated, dont do stupid things (like drink monster), nd do v smartness things (like talking to me nd playing roblox w me). i wish i can be there rn so that i can take care of u myself nd make u eat all ur meals sighhhgghh 😓
+            </p>
+
+            <p class="letter-paragraph">
+                ANYWAYSSS, get well soon babyyy, i hate how ass u feel rn. once ure done reading this, exit the page nd come talk to me. I MISS YOUUUU 🤍🤍
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function createRain() {
+            const duration = 5000;
+            const startTime = Date.now();
+            let frameCount = 0;
+            
+            function createHeart() {
+                if (Date.now() - startTime >= duration) {
+                    setTimeout(() => {
+                        document.querySelector('.heart').classList.add('fade-out');
+                        
+                        setTimeout(() => {
+                            document.querySelector('.heart').style.display = 'none';
+                            document.querySelector('.letter-box').classList.add('show');
+                        }, 1000);
+                    }, 2500);
+                    return;
+                }
+
+                frameCount++;
+                if (frameCount % 3 === 0) {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '♥';
+                    heart.className = 'falling-heart';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    document.body.appendChild(heart);
+
+                    heart.addEventListener('animationend', () => {
+                        heart.remove();
+                    });
+                }
+
+                requestAnimationFrame(createHeart);
+            }
+
+            createHeart();
+        }
+    </script>
+</body>
+</html>
